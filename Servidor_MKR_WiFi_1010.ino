@@ -113,61 +113,63 @@ void loop() {//Bucle principal
     Serial.println("Nuevo cliente");        // imprime mensaje por el puerto serie 
     String currentLine = "";                // Crea una cadena  String para guardar los datos del cliente 
     while (client.connected()) {            // Queda en bucle mientras el cliente este conectado 
-      if (client.available()) {             // Hay datos , bytes para leer del cliente ? 
+      if (client.available()) {             // Hay cliente ,datos , bytes para leer del cliente ? 
         char c = client.read();             // Entonces leemos un dato un caracter char
-        Serial.write(c);                    // imprime en el puerto serie el dato leido
+        //Serial.write(c);                    // imprime en el puerto serie el dato leido
         if (c == '\n') {                    // ha llegado al final?,fin de linea \n ?
           //Si la linea esta vacia , "blanca", obtenemos dos caractares en una linea
           //Es el final de la solicitud HTTP del cliente , entonces enviamos una respuesta
+          
           if (currentLine.length() == 0) {
             //Las cabeceras HTTP siempre empiezan con un codigo de respuesta 
             // p.e (HTTP/1.1 200 OK) +tipo de contenido +una linea en blanco
 
-            client.println("HTTP/1.1 200 OK");
+            client.println("HTTP/1.1 200 OK");//INICIO HTTP
             client.println("Content-type:text/html");
             client.println();
             client.print ("OPCIONES CONFIGURADO PINS DEL "+String(PRIMERO)+" AL "+String(ULTIMO)+"<br>");
-            for (uint8_t pin=PRIMERO;pin>=ULTIMO;pin--){//Crea los elementos WEB con los numeros
+            
+            for (uint8_t pin=PRIMERO;pin>=ULTIMO;pin--){//Crea los elementos para Encender/Apagar los LEDS con los numeros
               client.print ("N° PIN = "+String(pin)+"<br>");
               client.print("<font size=7> Click LED"+String(pin)+" <a href=\"/"+String(pin)+"_ON"+"\">here</a> turn the LED ON<br></font>");
               client.print("<font size=7> Click LED"+String(pin)+" <a href=\"/"+String(pin)+"_OFF"+"\">here</a> turn the LED OFF<br></font>");
             }
 
             //La respuesta HTTP termina con otra linea en blanco
-            client.println();
+            client.println();//FIN HTTP
 
             break;// Salir del bucle 
-          }
-          else {
+          }else {
             currentLine = "";//Si tenemos nueva linea \n ,limpiamos la linea actual currentLine 
           }
         }
         else if (c != '\r') {    // Si tenemos agun caracter diferente al retorno de carro '\r'
-          currentLine += c;      // Se anade a la linea actual
+          currentLine += c;      // Escribe la linea corriente ,el caracter se anade a la linea actual
         }
 
         //------------------------------------------------------------------------------------------------------------------------
         //Miramos si la solicitud del cliente , en la linea corriente del navegador, termina con "LED0_ENCENDIDO" o "LED0_APAGADO" 
-        /*
-        if (currentLine.endsWith("LED0_ENCENDIDO")) {
-          digitalWrite(led, HIGH);               // LED0_ENCENDIDO Enciende el Led
-        }
-        if (currentLine.endsWith("LED0_APAGADO")) {
-          digitalWrite(led, LOW);                // LED0_APAGADO Apaga el Led
-        }
-        */
+ 
         if(currentLine.endsWith("_ON")){//Si esta encendido 
+            Serial.println("LINEA On ORG = "+currentLine); 
             currentLine.remove (currentLine.indexOf('_'));//Busca caracter _ en la linea ,elimina el resto
-            currentLine+='\n';
-            Serial.println("LINEA OFF = "+currentLine); 
-            digitalWrite( currentLine.toInt(),HIGH);
+            currentLine.remove (0,currentLine.indexOf('/')+1);//Busca caracter / en la linea ,elimina el resto            
+            //currentLine+='\n';
+            Serial.println("LINEA On elimina _ = "+currentLine); 
+            Serial.println("Conversion pin = "+String (currentLine.toInt()));             
+            digitalWrite( currentLine.toInt(),HIGH);//Activa LED
+            currentLine="";
   
           
-        }else{//Esta apagado
+        }
+        if(currentLine.endsWith("_OFF")){//Esta apagado
+            Serial.println("LINEA Off org= "+currentLine); 
             currentLine.remove (currentLine.indexOf('_'));//Busca caracter _ en la linea ,elimina el resto  
-            currentLine+='\n';            
-            Serial.println("LINEA ON="+currentLine);                    
-            digitalWrite( currentLine.toInt(),LOW);          
+            currentLine.remove (0,currentLine.indexOf('/')+1);//Busca caracter / en la linea ,elimina el resto              
+            //currentLine+='\n';            
+            Serial.println("LINEA Off elimina _= "+currentLine);                    
+            digitalWrite( currentLine.toInt(),LOW);//Apaga LED 
+            currentLine="";        
         }
         
         //------------------------------------------------------------------------------------------------------------------------        

@@ -52,7 +52,11 @@ void setup() {
   Serial.println("Servidor Web -Access Point-");//Puerto serie
 
   //pinMode(led, OUTPUT);// Configura el modo de este PIN si es un LED como OUTPUT
-  configura_salidas(PRIMERO, ULTIMO);//Configura los PINs del PRIMERO 13 al ULTIMO 9 como salidas
+  configura_salidas();//Configura los PINs del PRIMERO 13 al ULTIMO 9 como salidas
+  //Test LED 13
+  //pinMode(6, OUTPUT);
+  //digitalWrite( 6,HIGH);//Activa LED
+  
   //  Verifica el modulo Wifi 
   if (WiFi.status() == WL_NO_MODULE) {
     Serial.println("La comunicacion con el modulo Wifi no funciona !");
@@ -69,7 +73,7 @@ void setup() {
   WiFi.config(IPAddress(IP));
 
   // Imprime el nombre de la red  (SSID);
-  Serial.print("Creando access point llamado : ");
+  Serial.print("Creando punto de acceso : ");
   Serial.println(ssid);
 
   //Creada open network .Cambiar esta linea si quieres crear una red WEP
@@ -80,8 +84,9 @@ void setup() {
     while (true);//Bucle infinito
   }
 
-  // Espera 10 segundos antes de la conexion
-  delay(10000);
+  // Espera X segundos antes de la conexion , 10000=10 segundos
+  //delay(10000);
+  delay(RETARDO);
 
   // Arranca el servidor web en el puerto 80
   server.begin();
@@ -127,30 +132,31 @@ void loop() {//Bucle principal
             client.println("HTTP/1.1 200 OK");//INICIO HTTP
             client.println("Content-type:text/html");
             client.println();
-            client.print ("OPCIONES CONFIGURADO PINS DEL "+String(PRIMERO)+" AL "+String(ULTIMO)+"<br>");
+            client.print ("ACTIVE O DESACTIVE EL LED <br>");
             
-            for (uint8_t pin=PRIMERO;pin>=ULTIMO;pin--){//Crea los elementos para Encender/Apagar los LEDS con los numeros
+            for (uint8_t pin=0;pin<=7;pin++){//Crea los elementos para Encender/Apagar los LEDS con los numeros
               client.print ("N° PIN = "+String(pin)+"<br>");
-              client.print("<font size=7> Click LED"+String(pin)+" <a href=\"/"+String(pin)+"_ON"+"\">here</a> turn the LED ON<br></font>");
-              client.print("<font size=7> Click LED"+String(pin)+" <a href=\"/"+String(pin)+"_OFF"+"\">here</a> turn the LED OFF<br></font>");
+              client.print("<font size=7> Pulse LED"+String(pin)+" <a href=\"/"+String(pin)+"_ON"+"\">AQUI</a> LED ON<br></font>");
+              client.print("<font size=7> Pulse LED"+String(pin)+" <a href=\"/"+String(pin)+"_OFF"+"\">AQUI</a> LED OFF<br></font>");
             }
 
             //La respuesta HTTP termina con otra linea en blanco
             client.println();//FIN HTTP
 
-            break;// Salir del bucle 
+            break;// Salir del bucle que muestra la pagina web
           }else {
             currentLine = "";//Si tenemos nueva linea \n ,limpiamos la linea actual currentLine 
           }
         }
         else if (c != '\r') {    // Si tenemos agun caracter diferente al retorno de carro '\r'
-          currentLine += c;      // Escribe la linea corriente ,el caracter se anade a la linea actual
+          currentLine += c;      // Escribe el nuevo caracter(char) la linea corriente ,currentLine
         }
 
         //------------------------------------------------------------------------------------------------------------------------
         //Miramos si la solicitud del cliente , en la linea corriente del navegador, termina con "LED0_ENCENDIDO" o "LED0_APAGADO" 
- 
-        if(currentLine.endsWith("_ON")){//Si esta encendido 
+        //https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer
+        //if(content.indexOf("Teststring") > 0)
+        if(currentLine.endsWith("_ON") && currentLine.indexOf("http")<0) {//Si esta encendido y la linea no contiene informacion http
             Serial.println("LINEA On ORG = "+currentLine); 
             currentLine.remove (currentLine.indexOf('_'));//Busca caracter _ en la linea ,elimina el resto
             currentLine.remove (0,currentLine.indexOf('/')+1);//Busca caracter / en la linea ,elimina el resto            
@@ -158,18 +164,18 @@ void loop() {//Bucle principal
             Serial.println("LINEA On elimina _ = "+currentLine); 
             Serial.println("Conversion pin = "+String (currentLine.toInt()));             
             digitalWrite( currentLine.toInt(),HIGH);//Activa LED
-            currentLine="";
+            currentLine="";//Limpia la linea .
   
           
         }
-        if(currentLine.endsWith("_OFF")){//Esta apagado
+        if(currentLine.endsWith("_OFF")&& currentLine.indexOf("http")<0){//Esta apagado
             Serial.println("LINEA Off org= "+currentLine); 
             currentLine.remove (currentLine.indexOf('_'));//Busca caracter _ en la linea ,elimina el resto  
             currentLine.remove (0,currentLine.indexOf('/')+1);//Busca caracter / en la linea ,elimina el resto              
             //currentLine+='\n';            
             Serial.println("LINEA Off elimina _= "+currentLine);                    
             digitalWrite( currentLine.toInt(),LOW);//Apaga LED 
-            currentLine="";        
+            currentLine="";//Limpia la linea .        
         }
         
         //------------------------------------------------------------------------------------------------------------------------        

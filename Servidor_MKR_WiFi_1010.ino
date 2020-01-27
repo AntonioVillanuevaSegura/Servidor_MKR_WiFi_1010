@@ -11,7 +11,7 @@
 #include "salidas.h" //Funciones para la gestion de las salida ,LEDs
 
 //Defino nombre del servidor y password
-#include "arduino_secrets.h"
+#include "configuracion.h"
 
 //Recupera el nombre del servidor SSID y el password wifi
 char ssid[] = SECRET_SSID;        // nombre servidor SSID

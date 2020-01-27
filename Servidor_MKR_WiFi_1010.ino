@@ -1,4 +1,5 @@
 /*
+ Antonio Villanueva Segura
  Servidor Wifi con activacion de PINs O Leds  tarjeta MKR WiFi 1010
  https://content.arduino.cc/assets/Pinout-MKRwifi1010_latest.png
 

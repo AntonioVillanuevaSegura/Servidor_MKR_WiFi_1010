@@ -30,7 +30,7 @@ WiFiServer server(80);//Servidor en el puerto 80
 //**********************************************************************************************
 
 void setup() {
-  //Initialize serial and wait for port to open:
+  //Inicializa y abre el puerto serie a 9600 bps
   Serial.begin(9600);
   while (!Serial) {//Eliminar si no queremos puerto serie 
     ;//Espera hasta que tengamos una conexion serie por el puerto USB 

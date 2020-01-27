@@ -15,9 +15,6 @@
 //Defino nombre del servidor y password
 #include "arduino_secrets.h"
 
-//IP del servidor wifi , ip del navegador
-//#define IP 192,168,6,1
-
 //Recupera el nombre del servidor SSID y el password wifi
 char ssid[] = SECRET_SSID;        // nombre servidor SSID
 char pass[] = SECRET_PASS;    //  pasword (usado en WPA o llave key en WEP)

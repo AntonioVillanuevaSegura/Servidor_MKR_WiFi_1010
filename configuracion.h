@@ -3,5 +3,5 @@
 //Nombre y clave del servidor WIFI
 #define SECRET_SSID "icaro"
 #define SECRET_PASS "123456789"
-//Rango de PINS como salidas
+//Retardo para iniciar
 #define RETARDO 10000

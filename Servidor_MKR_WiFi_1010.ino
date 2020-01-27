@@ -4,13 +4,7 @@
 
   Crea un servidor Web , donde podemos activar diferentes LEDs desde un
   navegador , por el puerto serie nos reporta informacion de la conexion
-  
-
-
-
-  created 25 Nov 2012
-  by Tom Igoe
-  adapted to WiFi AP by Adafruit
+ 
  */
 
 #include <SPI.h>

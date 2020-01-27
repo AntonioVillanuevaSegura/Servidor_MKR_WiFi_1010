@@ -117,9 +117,9 @@ void loop() {//Bucle principal
             client.print ("ACTIVE O DESACTIVE EL LED <br>");
             
             for (uint8_t pin=0;pin<=7;pin++){//Crea los elementos para Encender/Apagar los LEDS con los numeros
-              client.print ("N° PIN = "+String(pin)+"<br>");
-              client.print("<font size=7> Pulse LED"+String(pin)+" <a href=\"/"+String(pin)+"_ON"+"\">AQUI</a> LED ON<br></font>");
-              client.print("<font size=7> Pulse LED"+String(pin)+" <a href=\"/"+String(pin)+"_OFF"+"\">AQUI</a> LED OFF<br></font>");
+              client.print ("PIN = "+String(pin)+"<br>");
+              client.print("<font size=7> Enciende LED"+String(pin)+" <a href=\"/"+String(pin)+"_ON"+"\">AQUI</a> LED ON<br></font>");
+              client.print("<font size=7> Apaga LED"+String(pin)+" <a href=\"/"+String(pin)+"_OFF"+"\">AQUI</a> LED OFF<br></font>");
             }
 
             //La respuesta HTTP termina con otra linea en blanco

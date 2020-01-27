@@ -1,1 +1,3 @@
 # Arduino
+
+ test del MKR_WiFi_1010  como servidor wifi , donde controlamos unas salidas ...

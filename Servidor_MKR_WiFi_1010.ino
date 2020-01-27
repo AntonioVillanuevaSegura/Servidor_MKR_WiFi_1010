@@ -4,6 +4,7 @@
  https://content.arduino.cc/assets/Pinout-MKRwifi1010_latest.png
  Crea un servidor Web , donde podemos activar diferentes LEDs 0-7 ,desde un
  navegador , por el puerto serie nos reporta informacion de la conexion
+ https://www.iconshock.com/
  */
 
 #include <SPI.h>
@@ -118,6 +119,7 @@ void loop() {//Bucle principal
             
             for (uint8_t pin=0;pin<=7;pin++){//Crea los elementos para Encender/Apagar los LEDS con los numeros
               client.print ("PIN = "+String(pin)+"<br>");
+              //client.print("<img src=\"./images/on.jpg\">");
               client.print("<font size=7> Enciende LED"+String(pin)+" <a href=\"/"+String(pin)+"_ON"+"\">AQUI</a> LED ON<br></font>");
               client.print("<font size=7> Apaga LED"+String(pin)+" <a href=\"/"+String(pin)+"_OFF"+"\">AQUI</a> LED OFF<br></font>");
             }

@@ -119,7 +119,11 @@ void loop() {//Bucle principal
             
             for (uint8_t pin=0;pin<=7;pin++){//Crea los elementos para Encender/Apagar los LEDS con los numeros
               client.print ("PIN = "+String(pin)+"<br>");
-              //client.print("<img src=\"./images/on.jpg\">");
+
+              //Tests 
+              //http://diymakers.es/crear-servidor-web-con-arduino/
+              //client.println("<button onClick=location.href='./?LED=ON\' style='margin:auto;background-color: #84B1FF;color: snow;padding: 10px;border: 1px solid #3F7CFF;width:65px;'>");
+              
               client.print("<font size=7> Enciende LED"+String(pin)+" <a href=\"/"+String(pin)+"_ON"+"\">AQUI</a> LED ON<br></font>");
               client.print("<font size=7> Apaga LED"+String(pin)+" <a href=\"/"+String(pin)+"_OFF"+"\">AQUI</a> LED OFF<br></font>");
             }

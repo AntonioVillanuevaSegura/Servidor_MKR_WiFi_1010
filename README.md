@@ -12,5 +12,5 @@ Las salidas que controlamos van de 0 a 7 fichero salidas.cpp
 
 La pagina web se crea desde el fichero pagina.cpp
 
-![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+![alt text](https://github.com/AntonioVillanuevaSegura/Servidor_MKR_WiFi_1010/blob/master/photo_2020-01-29_13-14-18.jpg)
 

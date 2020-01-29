@@ -6,15 +6,15 @@
  navegador , por el puerto serie nos reporta informacion de la conexion
  https://www.iconshock.com/
  */
-
-//Configuracion de este programa diversos parametros 
+ 
+//**********************************************************************************************
+//Configuracion de este programa valor de IP , nombre de SSID, password , retardo ...
 #include "configuracion.h"
 
 #include <SPI.h>
 #include <WiFiNINA.h>
 #include "salidas.h" //Funciones para la gestion de las salida ,LEDs
 #include "pagina.h" //Funciones para la gestion de las salida ,LEDs
-
 
 //Recupera el nombre del servidor SSID y el password wifi
 char ssid[] = SECRET_SSID;        // nombre servidor SSID
@@ -23,7 +23,7 @@ int keyIndex = 0;                // Numero de indice (key index) para tu red (so
 
 //int led =  LED_BUILTIN;//LED en la tarjeta con direccion 13
 int status = WL_IDLE_STATUS;
-WiFiServer server(80);//Servidor en el puerto 80
+WiFiServer server(PUERTO);//Servidor en el puerto 80
 
 //**********************************************************************************************
 
@@ -61,7 +61,7 @@ void setup() {
   Serial.print("Creando punto de acceso : ");
   Serial.println(ssid);
 
-  //Creada open network .Cambiar esta linea si quieres crear una red WEP
+  //Creada open network .Cambiar esta linea si quieres crear una red WEP ...
   status = WiFi.beginAP(ssid, pass);
   if (status != WL_AP_LISTENING) {
     Serial.println("Error en la creacion del access point");
@@ -70,7 +70,6 @@ void setup() {
   }
 
   // Espera X segundos antes de la conexion , 10000=10 segundos
-  //delay(10000);
   delay(RETARDO);
 
   // Arranca el servidor web en el puerto 80
@@ -111,29 +110,9 @@ void loop() {//Bucle principal
           //Es el final de la solicitud HTTP del cliente , entonces enviamos una respuesta
           
           if (currentLine.length() == 0) {
-            //Las cabeceras HTTP siempre empiezan con un codigo de respuesta 
-            // p.e (HTTP/1.1 200 OK) +tipo de contenido +una linea en blanco
-            paginaWeb(client);
-/*
-            client.println("HTTP/1.1 200 OK");//INICIO HTTP
-            client.println("Content-type:text/html");
-            client.println();
-            client.println ("ACTIVE O DESACTIVE EL LED <br>");
             
-            for (uint8_t pin=0;pin<=7;pin++){//Crea los elementos para Encender/Apagar los LEDS con los numeros
-              client.print ("PIN = "+String(pin)+"<br>");
+            paginaWeb(client);// ofrece la pagina WEB al cliente
 
-              //Tests 
-              //http://diymakers.es/crear-servidor-web-con-arduino/
-              //client.println("<button onClick=location.href='./?LED=ON\' style='margin:auto;background-color: #84B1FF;color: snow;padding: 10px;border: 1px solid #3F7CFF;width:65px;'>");
-              
-              client.print("<font size=7> Enciende LED"+String(pin)+" <a href=\"/"+String(pin)+"_ON"+"\">AQUI</a> LED ON<br></font>");
-              client.print("<font size=7> Apaga LED"+String(pin)+" <a href=\"/"+String(pin)+"_OFF"+"\">AQUI</a> LED OFF<br></font>");
-            }
-
-            //La respuesta HTTP termina con otra linea en blanco
-            client.println();//FIN HTTP
-*/
             break;// Salir del bucle que muestra la pagina web
           }else {
             currentLine = "";//Si tenemos nueva linea \n ,limpiamos la linea actual currentLine 
@@ -144,14 +123,13 @@ void loop() {//Bucle principal
         }
 
         //------------------------------------------------------------------------------------------------------------------------
-        //Miramos si la solicitud del cliente , en la linea corriente del navegador, termina con "LED0_ENCENDIDO" o "LED0_APAGADO" 
+        // Analizamos la respuesta del cliente en la pagina WEB . Termina con "_ON" o "_OFF" , recupera el numero de pin o LED
         //https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer
-        //if(content.indexOf("Teststring") > 0)
+
         if(currentLine.endsWith("_ON") && currentLine.indexOf("http")<0) {//Si esta encendido y la linea no contiene informacion http
             Serial.println("LINEA On ORG = "+currentLine); 
             currentLine.remove (currentLine.indexOf('_'));//Busca caracter _ en la linea ,elimina el resto
             currentLine.remove (0,currentLine.indexOf('/')+1);//Busca caracter / en la linea ,elimina el resto            
-            //currentLine+='\n';
             Serial.println("LINEA On elimina _ = "+currentLine); 
             Serial.println("Conversion pin = "+String (currentLine.toInt()));             
             digitalWrite( currentLine.toInt(),HIGH);//Activa LED
@@ -162,8 +140,7 @@ void loop() {//Bucle principal
         if(currentLine.endsWith("_OFF")&& currentLine.indexOf("http")<0){//Esta apagado
             Serial.println("LINEA Off org= "+currentLine); 
             currentLine.remove (currentLine.indexOf('_'));//Busca caracter _ en la linea ,elimina el resto  
-            currentLine.remove (0,currentLine.indexOf('/')+1);//Busca caracter / en la linea ,elimina el resto              
-            //currentLine+='\n';            
+            currentLine.remove (0,currentLine.indexOf('/')+1);//Busca caracter / en la linea ,elimina el resto                        
             Serial.println("LINEA Off elimina _= "+currentLine);                    
             digitalWrite( currentLine.toInt(),LOW);//Apaga LED 
             currentLine="";//Limpia la linea .        

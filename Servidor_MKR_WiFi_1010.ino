@@ -7,12 +7,14 @@
  https://www.iconshock.com/
  */
 
+//Configuracion de este programa diversos parametros 
+#include "configuracion.h"
+
 #include <SPI.h>
 #include <WiFiNINA.h>
 #include "salidas.h" //Funciones para la gestion de las salida ,LEDs
+#include "pagina.h" //Funciones para la gestion de las salida ,LEDs
 
-//Defino nombre del servidor y password
-#include "configuracion.h"
 
 //Recupera el nombre del servidor SSID y el password wifi
 char ssid[] = SECRET_SSID;        // nombre servidor SSID
@@ -111,11 +113,12 @@ void loop() {//Bucle principal
           if (currentLine.length() == 0) {
             //Las cabeceras HTTP siempre empiezan con un codigo de respuesta 
             // p.e (HTTP/1.1 200 OK) +tipo de contenido +una linea en blanco
-
+            paginaWeb(client);
+/*
             client.println("HTTP/1.1 200 OK");//INICIO HTTP
             client.println("Content-type:text/html");
             client.println();
-            client.print ("ACTIVE O DESACTIVE EL LED <br>");
+            client.println ("ACTIVE O DESACTIVE EL LED <br>");
             
             for (uint8_t pin=0;pin<=7;pin++){//Crea los elementos para Encender/Apagar los LEDS con los numeros
               client.print ("PIN = "+String(pin)+"<br>");
@@ -130,7 +133,7 @@ void loop() {//Bucle principal
 
             //La respuesta HTTP termina con otra linea en blanco
             client.println();//FIN HTTP
-
+*/
             break;// Salir del bucle que muestra la pagina web
           }else {
             currentLine = "";//Si tenemos nueva linea \n ,limpiamos la linea actual currentLine 

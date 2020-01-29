@@ -12,3 +12,5 @@ Las salidas que controlamos van de 0 a 7 fichero salidas.cpp
 
 La pagina web se crea desde el fichero pagina.cpp
 
+![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+

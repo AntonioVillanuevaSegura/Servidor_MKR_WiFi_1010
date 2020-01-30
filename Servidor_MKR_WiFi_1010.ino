@@ -14,7 +14,7 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
 #include "salidas.h" //Funciones para la gestion de las salida ,LEDs
-#include "pagina.h" //Funciones para la gestion de las salida ,LEDs
+#include "pagina.h" //Gestion de la pagina WEB , botones
 
 //Recupera el nombre del servidor SSID y el password wifi
 char ssid[] = SECRET_SSID;        // nombre servidor SSID

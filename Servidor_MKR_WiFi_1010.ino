@@ -21,7 +21,6 @@ char ssid[] = SECRET_SSID;        // nombre servidor SSID
 char pass[] = SECRET_PASS;    //  pasword (usado en WPA o llave key en WEP)
 int keyIndex = 0;                // Numero de indice (key index) para tu red (solo en WEP)
 
-//int led =  LED_BUILTIN;//LED en la tarjeta con direccion 13
 int status = WL_IDLE_STATUS;
 WiFiServer server(PUERTO);//Servidor en el puerto 80
 

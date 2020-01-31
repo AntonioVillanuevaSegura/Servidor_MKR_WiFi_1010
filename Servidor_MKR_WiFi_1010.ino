@@ -35,7 +35,7 @@ void setup() {
   }
   Serial.println("Servidor Web -Access Point-");//Puerto serie
  
-  configura_salidas();//Configura los PINs del PRIMERO 13 al ULTIMO 9 como salidas
+  configura_salidas();//Configura los PINs de salida 0 ..7 p.e 
 
   //  Verifica el modulo Wifi 
   if (WiFi.status() == WL_NO_MODULE) {

@@ -15,9 +15,6 @@ void paginaWeb(WiFiClient client){
   client.println("<body>");
   client.println("<h1 align='center'>ICARO</h1><h3 align='center'>Servidor web control salidas</h3>");
 
-  //client.print("<font size=7> Enciende LED"+String(pin)+" <a href=\"/"+String(pin)+"_ON"+"\">AQUI</a> LED ON<br></font>");
-  //client.print("<font size=7> Apaga LED"+String(pin)+" <a href=\"/"+String(pin)+"_OFF"+"\">AQUI</a> LED OFF<br></font>");
-
   //Crea botones .parametros se envian a traves de ?
   for (uint8_t pin=0;pin<=7;pin++){//Crea los elementos para Encender/Apagar los LEDS con los numeros
     client.println("<div style='text-align:center;'>");
@@ -31,9 +28,7 @@ void paginaWeb(WiFiClient client){
     client.println("</button>");
     
     client.println("<br /><br />");
-    
-    //client.println("<b>LED = ");
-    //client.println("</b><br />");
+
     client.println("</b></body>");
     client.println("</html>");
     client.println();//FIN HTTP    

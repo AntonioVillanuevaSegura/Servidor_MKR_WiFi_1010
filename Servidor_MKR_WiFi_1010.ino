@@ -33,22 +33,17 @@ void setup() {
   while (!Serial) {//Eliminar si no queremos puerto serie 
     ;//Espera hasta que tengamos una conexion serie por el puerto USB 
   }
-
   Serial.println("Servidor Web -Access Point-");//Puerto serie
-
-  //pinMode(led, OUTPUT);// Configura el modo de este PIN si es un LED como OUTPUT
+ 
   configura_salidas();//Configura los PINs del PRIMERO 13 al ULTIMO 9 como salidas
-  //Test LED 13
-  //pinMode(6, OUTPUT);
-  //digitalWrite( 6,HIGH);//Activa LED
-  
+
   //  Verifica el modulo Wifi 
   if (WiFi.status() == WL_NO_MODULE) {
     Serial.println("La comunicacion con el modulo Wifi no funciona !");
     // No se continua
     while (true);
   }
-
+ 
   String fv = WiFi.firmwareVersion();
   if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
     Serial.println("Actualice el firmware WIFI a la ultima version S");
@@ -78,7 +73,6 @@ void setup() {
   //Estas conectado imprime el status
   printWiFiStatus();
 }
-
 //**********************************************************************************************
 
 void loop() {//Bucle principal 

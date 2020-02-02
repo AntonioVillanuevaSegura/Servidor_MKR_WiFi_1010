@@ -20,7 +20,7 @@ void paginaWeb(WiFiClient client){
     client.println("<div style='text-align:center;'>");
 
     client.println("<button onClick=location.href=\"/"+String(pin)+"_ON"+"\" style='margin:auto;background-color: #24A807;color: snow;padding: 10px;border: 1px solid #3F7CFF;width:65px;'>");
-    client.println("ON "+String(pin));//Texto en boton
+    client.println("ON  "+String(pin));//Texto en boton
     client.println("</button>");
     
     client.println("<button onClick=location.href=\"/"+String(pin)+"_OFF"+"\" style='margin:auto;background-color: #BA0B25;color: snow;padding: 10px;border: 1px solid #3F7CFF;width:65px;'>");

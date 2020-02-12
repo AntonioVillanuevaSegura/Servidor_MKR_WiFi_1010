@@ -22,7 +22,7 @@ char pass[] = SECRET_PASS;    //  pasword (usado en WPA o llave key en WEP)
 int keyIndex = 0;                // Numero de indice (key index) para tu red (solo en WEP)
 
 int status = WL_IDLE_STATUS;
-WiFiServer server(PUERTO);//Servidor en el puerto 80
+WiFiServer server(80);//Servidor en el puerto 80
 
 //**********************************************************************************************
 
@@ -32,9 +32,14 @@ void setup() {
   while (!Serial) {//Eliminar si no queremos puerto serie 
     ;//Espera hasta que tengamos una conexion serie por el puerto USB 
   }
-  Serial.println("Servidor Web -Access Point-");//Puerto serie
- 
-  configura_salidas();//Configura los PINs de salida 0 ..7 p.e 
+  
+  #ifdef SERVIDOR
+    Serial.println("Servidor Web -Tarjeta como punto de acceso -");//DEBUG
+  #else
+    Serial.println("Nos conectamos a un router");
+  #endif     
+  
+  configura_salidas();//Configura los PINs de salida 0 ..12 p.e 
 
   //  Verifica el modulo Wifi 
   if (WiFi.status() == WL_NO_MODULE) {
@@ -48,21 +53,32 @@ void setup() {
     Serial.println("Actualice el firmware WIFI a la ultima version S");
   }
 
-  //Direccion IP por defecto ,recupera del #define IP=192.168.6.1
-  WiFi.config(IPAddress(IP));
+  #ifdef SERVIDOR
+    //Direccion IP por defecto ,recupera del #define IP=192.168.6.1
+    WiFi.config(IPAddress(IP));
+  #else
+    //Conecta con un router SSID y PASSword
+     WiFi.begin(SECRET_SSID, SECRET_PASS);//Conecta al router con el SSID y el PWD
+  #endif
 
-  // Imprime el nombre de la red  (SSID);
-  Serial.print("Creando punto de acceso : ");
-  Serial.println(ssid);
+  #ifdef SERVIDOR  
+    // Imprime el nombre de la red  (SSID);
+    Serial.print("Creando punto de acceso : ");
+    Serial.println(ssid);
+  #else
+     Serial.print("Servidor Web en IP ");
+    
+  #endif    
 
   //Creada open network .Cambiar esta linea si quieres crear una red WEP ...
-  status = WiFi.beginAP(ssid, pass);
-  if (status != WL_AP_LISTENING) {
-    Serial.println("Error en la creacion del access point");
-    // don't continue
-    while (true);//Bucle infinito
-  }
-
+  #ifdef SERVIDOR
+    status = WiFi.beginAP(ssid, pass);
+    if (status != WL_AP_LISTENING) {
+      Serial.println("Error en la creacion del access point");
+      // don't continue
+      while (true);//Bucle infinito
+    }
+  #endif
   // Espera X segundos antes de la conexion , 10000=10 segundos
   delay(RETARDO);
 
@@ -75,20 +91,22 @@ void setup() {
 //**********************************************************************************************
 
 void loop() {//Bucle principal 
-  // COmpara el estado anterior con el actual 
-  if (status != WiFi.status()) {
-    //Si ha cambiado , actualizamos la variable estado 
-    status = WiFi.status();
-
-    if (status == WL_AP_CONNECTED) {
-      // Dispositivo conectado al access point AP 
-      Serial.println("Dispositivo conectado al AP");
-    } else {
-      // Dispositivo desconectado del AP ,volvemos al modo escucha 
-      Serial.println("Dispositivo desconectado del AP");
+  #ifdef SERVIDOR
+    // COmpara el estado anterior con el actual 
+    if (status != WiFi.status()) {
+      //Si ha cambiado , actualizamos la variable estado 
+      status = WiFi.status();
+  
+      if (status == WL_AP_CONNECTED) {
+        // Dispositivo conectado al access point AP 
+        Serial.println("Dispositivo conectado al AP");
+      } else {
+        // Dispositivo desconectado del AP ,volvemos al modo escucha 
+        Serial.println("Dispositivo desconectado del AP");
+      }
     }
-  }
- 
+  #endif
+  
   WiFiClient client = server.available();   // Espera clientes disponibles 
 
   if (client) {                             // Si hay un nuevo cliente

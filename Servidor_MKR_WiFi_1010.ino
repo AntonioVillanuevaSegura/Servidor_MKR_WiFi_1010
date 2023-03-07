@@ -1,5 +1,9 @@
 /*
  Antonio Villanueva Segura
+ 
+ https://www.youtube.com/shorts/km_CX-bZnU8
+ https://www.youtube.com/watch?v=vPnfrg0IYxo
+ 
  Servidor Wifi con activacion de PINs O Leds  tarjeta MKR WiFi 1010
  https://content.arduino.cc/assets/Pinout-MKRwifi1010_latest.png
  Crea un servidor Web , donde podemos activar diferentes LEDs 0-7 ,desde un
